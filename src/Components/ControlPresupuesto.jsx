@@ -1,4 +1,20 @@
-const ControlPresupuesto = ({valor}) => {
+import { useState } from "react";
+import { useEffect } from "react";
+
+
+
+const ControlPresupuesto = ({gastos, valor}) => {
+
+    const [disponible, setDisponible] = useState(0)
+    const [gastado, setGastado] = useState(0)
+
+    useEffect(() => {
+        const totalGastado = gastos.reduce( (total, gasto) => gasto.cantidad + total, 0)
+        console.log( typeof totalGastado)
+        const totalDisponible = valor - totalGastado 
+        setGastado(totalGastado)
+        setDisponible(totalDisponible)
+    },[gastos])
     
     const converMoneda = (cantidad) =>{
         return cantidad.toLocaleString('en-US',{
@@ -16,13 +32,13 @@ const ControlPresupuesto = ({valor}) => {
 
                 <div className="contenido-presupuesto">
                     <p>
-                        <span>Presupuesto: </span> {converMoneda(valor)}
+                        <span>Presupuesto: </span>{converMoneda(valor)}
                     </p>
                     <p>
-                        <span>Disponible: </span> {converMoneda(0)}
+                        <span>Disponible: </span>{converMoneda(disponible)}
                     </p>
                     <p>
-                        <span>Gasto: </span> {converMoneda(0)}
+                        <span>Gasto: </span> {converMoneda(gastado)}
                     </p>
                 </div>
             </div>

@@ -76,7 +76,7 @@ const NewFormPresupuesto = ({setNewVentana, animarVentana, setAnimarVentana, gua
                             type='number'
                             placeholder='Añada la cantidad del gasto Ej: 9000'
                             value={cantidad}
-                            onChange={(e) => setCantidad(e.target.value)}
+                            onChange={(e) => setCantidad(Number(e.target.value))}
                             // onChange={}
                         />
                     </div>

@@ -6,11 +6,16 @@ import ListadoGastos from "./Components/ListadoGastos";
 import IconoNuevoGasto from "./img/nuevo-gasto.svg";
 
 function App() {
+
+  const [gastos, setGastos] = useState([]);
+  
   const [valor, setValor] = useState();
   const [isValid, setIsValid] = useState(false);
+
   const [newVenta, setNewVentana] = useState(false);
   const [animarVentana, setAnimarVentana] = useState(false);
-  const [gastos, setGastos] = useState([]);
+
+  const [gastoEditar, setGastoEditar ] = useState({})
 
   const handleNuevoGasto = () => {
     setNewVentana(true);
@@ -33,8 +38,9 @@ function App() {
   };
 
   return (
-    <div className={newVenta && 'fijar'}>
+    <div className={newVenta ? 'fijar' : ''}>
       <Header
+        gastos={gastos}
         valor={valor}
         setValor={setValor}
         isValid={isValid}
@@ -46,6 +52,7 @@ function App() {
           <main>
             <ListadoGastos 
               gastos={gastos}
+              setGastoEditar={setGastoEditar}
             />
           </main>
           <div className="nuevo-gasto">

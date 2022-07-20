@@ -2,7 +2,7 @@ import { useState } from "react";
 import FormPresupuesto from "./FormPresupuesto";
 import ControlPresupuesto from "./ControlPresupuesto";
 
-const Header = ({ valor, setValor, isValid, setIsValid }) => {
+const Header = ({gastos, valor, setValor, isValid, setIsValid }) => {
   return (
     <>
       <header>
@@ -10,6 +10,7 @@ const Header = ({ valor, setValor, isValid, setIsValid }) => {
 
         {isValid ? (
           <ControlPresupuesto 
+            gastos={gastos}
             valor={valor}
           />
         ) : (
