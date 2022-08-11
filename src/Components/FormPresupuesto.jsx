@@ -4,11 +4,11 @@ import { useState } from "react";
 import Mensaje from "./Mensajes";
 
 const FormPresupuesto = ({ valor, setValor, setIsValid }) => {
+  
   const [mensaje, setMensaje] = useState("");
-
-  /**
-   * Validación de Formulario
-   */
+  
+  // Validación de Formulario
+  
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -18,8 +18,8 @@ const FormPresupuesto = ({ valor, setValor, setIsValid }) => {
       return;
     }
     // setMensaje('Es un presupesto valido');
+    // console.log("Es un presupesto valido");
     setMensaje("");
-    console.log("Es un presupesto valido");
     setIsValid(true);
   };
 
@@ -34,7 +34,7 @@ const FormPresupuesto = ({ valor, setValor, setIsValid }) => {
       <div className="contenedor-presupuesto contenedor sombra">
         <form onSubmit={handleSubmit} className="formulario">
           <div className="campo">
-            <label>Definir Campo</label>
+            <label>Definir Presupuesto</label>
             <input
               className="nuevo-presupuesto"
               type="number"

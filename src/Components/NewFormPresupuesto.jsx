@@ -1,18 +1,31 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Mensaje from './Mensajes'
 import BtnCerrar from '../img/cerrar.svg'
 
-const NewFormPresupuesto = ({setNewVentana, animarVentana, setAnimarVentana, guardarGastos}) => {
+const NewFormPresupuesto = ({setNewVentana, animarVentana, setAnimarVentana, guardarGastos, gastoEditar, setGastoEditar}) => {
     
     
     const [nombre, setNombre] = useState('')
     const [cantidad, setCantidad] = useState('')
     const [categoria, setCategoria] = useState('')
     const [mjsError, setMjsError] = useState('')
+    const [id, setId] = useState('')
+    const [fecha, setFecha] = useState('')
+
+    useEffect(()=> {
+        if (Object.keys(gastoEditar).length > 0){
+            setNombre(gastoEditar.nombre)
+            setCantidad(gastoEditar.cantidad)
+            setCategoria(gastoEditar.categoria)
+            setId(gastoEditar.id)
+            setFecha(gastoEditar.fecha)
+        }
+    },[])
     
     const handleCerrar = () =>{
         // console.log('cerrando...');
         setAnimarVentana(false)
+        setGastoEditar({})
         
         setTimeout(() => {
             setNewVentana(false)
@@ -29,10 +42,10 @@ const NewFormPresupuesto = ({setNewVentana, animarVentana, setAnimarVentana, gua
 
             setTimeout(() => {
                 setMjsError('')
-            },300)
+            },3000)
             return      
         }
-        guardarGastos({nombre, cantidad, categoria})
+        guardarGastos({nombre, cantidad, categoria, id, fecha})
 
     }
 
@@ -46,6 +59,7 @@ const NewFormPresupuesto = ({setNewVentana, animarVentana, setAnimarVentana, gua
                         src={BtnCerrar}
                         alt='Boton cerrar'
                         onClick={handleCerrar}
+                        className='close'
                     />
                 </div>
 
@@ -53,7 +67,7 @@ const NewFormPresupuesto = ({setNewVentana, animarVentana, setAnimarVentana, gua
                     onSubmit={handleSubmit} 
                     className={`formulario ${animarVentana ? "animar": 'cerrar'}`}>
                     {mjsError && <Mensaje tipo='error'>{mjsError}</Mensaje> }
-                    <legend>Nuevo Gasto</legend>
+                    <legend>{gastoEditar.nombre ? 'Editar Gasto': 'Nuevo Gasto'}</legend>
 
                     <div className='campo'>
                         <label htmlFor='nombre'>Nombre Gasto</label>
@@ -103,7 +117,7 @@ const NewFormPresupuesto = ({setNewVentana, animarVentana, setAnimarVentana, gua
 
                     <input 
                         type='submit'
-                        value='Añadir Gasto'
+                        value={gastoEditar.nombre ? 'Editar Gasto': 'Añadir Gasto'}
                     />
                 </form>
 

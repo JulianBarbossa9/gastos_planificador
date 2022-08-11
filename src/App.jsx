@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./Components/Header";
 import { generarId } from "./helpers";
 import NewFormPresupuesto from "./Components/NewFormPresupuesto";
 import ListadoGastos from "./Components/ListadoGastos";
 import IconoNuevoGasto from "./img/nuevo-gasto.svg";
+import { object } from "prop-types";
 
 function App() {
 
@@ -15,10 +16,23 @@ function App() {
   const [newVenta, setNewVentana] = useState(false);
   const [animarVentana, setAnimarVentana] = useState(false);
 
-  const [gastoEditar, setGastoEditar ] = useState({})
+  const [gastoEditar, setGastoEditar ] = useState({}); //Objeto
+
+  useEffect(() => {
+    if(Object.keys(gastoEditar).length > 0){
+      // handleNuevoGasto()
+      setNewVentana(true)
+
+      setTimeout(() => {
+        setAnimarVentana(true);
+      }, 500);
+      
+    }
+  },[gastoEditar])
 
   const handleNuevoGasto = () => {
-    setNewVentana(true);
+    setNewVentana(true)
+    setGastoEditar({})
 
     setTimeout(() => {
       setAnimarVentana(true);
@@ -26,9 +40,18 @@ function App() {
   };
 
   const guardarGastos = (gasto) => {
-    gasto.id = generarId();
-    gasto.fecha = Date.now() 
-    setGastos([...gastos, gasto]);
+    
+    if (gasto.id){
+      // Actualizar
+      const gastosActualizado = gastos.map(gastoState => gastoState.id === gasto.id ? gasto : gastoState)
+      setGastos(gastosActualizado)
+      setGastoEditar({})
+    } else {
+      // Nuevo gasto
+      gasto.id = generarId()
+      gasto.fecha = Date.now()
+      setGastos([...gastos, gasto])
+    }
 
     setAnimarVentana(false);
 
@@ -36,6 +59,15 @@ function App() {
       setNewVentana(false);
     }, 300);
   };
+
+  const eliminarGasto = id => {
+    // console.log('Eliminar gasto', id)
+    const gastosActualizados = gastos.filter(gasto => gasto.id !== id)
+    // console.log(gastosActualizados)
+    setGastos(gastosActualizados)
+  }
+
+  // --- //
 
   return (
     <div className={newVenta ? 'fijar' : ''}>
@@ -53,6 +85,7 @@ function App() {
             <ListadoGastos 
               gastos={gastos}
               setGastoEditar={setGastoEditar}
+              eliminarGasto={eliminarGasto}
             />
           </main>
           <div className="nuevo-gasto">
@@ -71,6 +104,8 @@ function App() {
           animarVentana={animarVentana}
           setAnimarVentana={setAnimarVentana}
           guardarGastos={guardarGastos}
+          gastoEditar={gastoEditar}
+          setGastoEditar={setGastoEditar}
         />
       )}
     </div>
