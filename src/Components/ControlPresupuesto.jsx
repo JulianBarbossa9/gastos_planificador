@@ -4,7 +4,7 @@ import "react-circular-progressbar/dist/styles.css"
 
 
 
-const ControlPresupuesto = ({gastos, valor}) => {
+const ControlPresupuesto = ({gastos,setGastos, valor, setValor, setIsValid }) => {
 
     const [disponible, setDisponible] = useState(0)
     const [gastado, setGastado] = useState(0)
@@ -22,7 +22,7 @@ const ControlPresupuesto = ({gastos, valor}) => {
 
         setTimeout(() => {
             setPorcentaje(valorPorcentaje)
-        },1000)
+        },800)
     },[gastos])
     
     const converMoneda = (cantidad) =>{
@@ -31,6 +31,15 @@ const ControlPresupuesto = ({gastos, valor}) => {
             currency: 'USD'
         })
     } 
+
+    const handleResetApp = () => {
+        const result = confirm('¿Desea resetear la app?')
+        if (result){
+            setGastos([])
+            setValor(0)
+            setIsValid(false)
+        } 
+    }
     
     return (  
         <>
@@ -38,18 +47,27 @@ const ControlPresupuesto = ({gastos, valor}) => {
                 <div>
                     <CircularProgressbar
                         styles={buildStyles({
-                            pathColor:'#2d393c',
-                            trailColor:'#F5F5F5'
+                            pathColor:porcentaje > 100 ? '#DC2626' : '#2d393c',
+                            trailColor:'#F5F5F5',
+                            textColor: porcentaje > 100 ? '#DC2626' : '#2d393c'
                         })}
                         value={porcentaje}
+                        text={`${porcentaje}% Gastado`}
                     />
                 </div>
 
                 <div className="contenido-presupuesto">
+                    <button
+                        className="reset-app"
+                        type="button"
+                        onClick={handleResetApp}
+                    >
+                        Resetear App
+                    </button>
                     <p>
                         <span>Presupuesto: </span>{converMoneda(valor)}
                     </p>
-                    <p>
+                    <p className={`${disponible < 0 ? 'negativo': '' }`}>
                         <span>Disponible: </span>{converMoneda(disponible)}
                     </p>
                     <p>
